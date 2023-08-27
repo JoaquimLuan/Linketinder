@@ -1,0 +1,71 @@
+Candidato
+Nome:João
+Email:joao@example.com
+CPF:12345678910
+Idade:30
+Estado:SP
+CEP:12345678
+Descrição:Desenvolvedor
+Competências:Java, Python
+
+Candidato
+Nome:joaqum
+Email:joaquim@gmail
+CPF:9809898777
+Idade:33
+Estado:go
+CEP:76000000
+Descrição:Desenvolvedor
+Competências:java, groovy
+
+Candidato
+Nome:manoel
+Email:manoel@gmail.com
+CPF:98765444456
+Idade:33
+Estado:TO
+CEP:76555666
+Descrição:Desenvolvedor
+Competências:C++, HTML
+
+Candidato
+Nome:Marcos
+Email:marcos@gmailk.com
+CPF:99988877
+Idade:22
+Estado:GO
+CEP:76000000
+Descrição:Desenvolvedor
+Competências:SQL, phyton
+
+Candidato
+Nome:Marcela
+Email:marcela@hotmail.com
+CPF:98787688890
+Idade:18
+Estado:PA
+CEP:44555000
+Descrição:Desenvolvedora java
+Competências:java, angulas
+
+
+Candidato
+Nome:Marcela Numes
+Email:marcela@mail.com
+CPF:9877765678
+Idade:20
+Estado:MA
+CEP:65777000
+Descrição:Desenvolvedora junior
+Competências:HTML, CSS
+
+Candidato
+Nome:Thais Bomtempo
+Email:thais@ggmail.com
+CPF:9898788899
+Idade:33
+Estado:GO
+CEP:76888999
+Descrição:Dev junior
+Competências:java, angular
+
