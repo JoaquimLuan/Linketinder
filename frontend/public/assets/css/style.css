@@ -1,0 +1,100 @@
+body {
+  margin: 0 0 0 0;
+}
+
+header {
+  position: relative;
+  background:	#1e3038;
+  padding: 1px 0;
+  color: white;
+  margin: 0 0 0 0;
+}
+
+.caixa {
+  display: inline-flex;
+  position:relative;
+  width: 90%;
+
+}
+h1 {
+  background-image: linear-gradient(to bottom, rebeccapurple, steelblue, turquoise);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: black;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+nav {
+  background: #1e3038;
+  position:absolute;
+  right: 0;
+}
+
+
+nav li {
+  display: inline;
+  margin: 50px 20px 0 20px;
+
+}
+
+nav ul {
+  margin-top: 20px;
+  padding-top: 15px;
+
+}
+
+nav a {
+  text-transform: uppercase;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-decoration: none;
+
+}
+
+button {
+  text-transform: uppercase;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  background: #1e3038;
+  border: none;
+}
+
+nav li :hover {
+  color: #1a8099;
+  text-decoration: underline;
+}
+
+h2 {
+  background-image: linear-gradient(to bottom, rebeccapurple, steelblue, turquoise);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: white;
+  font-size: 60px;
+}
+p {
+  color: white;
+  font-size: 30px;
+}
+
+
+.imagem-inicio {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("../img/img2.jpg");
+  background-size: cover;
+  padding: 40px 0;
+  height: 100%;
+  text-align: center
+}
+
+.imagem-back {
+  width: 100%;
+  height: 500px;
+  background-size: cover;
+  position: relative;
+  z-index: 0;
+
+}

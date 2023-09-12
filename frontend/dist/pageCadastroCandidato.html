@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Usuário</title>
+
+  <link rel="stylesheet" href="/assets/css/cadastro.css">
+
+</head>
+<body>
+<header>
+
+  <div class="caixa">
+
+    <h1> Linketinder </h1>
+
+    <section class="logo">
+      <div class="linketinder">
+      </div>
+    </section>
+
+    <nav>
+
+      <ul>
+        <li><a href="index.html"><button class="home">Home</button></a></li>
+        <li><a href="pageCadastroEmpresa.html"><button class="cadastroEmpresa">Cadastrar Empresa</button></a></li>
+        <li><a href="pageCadastroCandidato.html"><button class="cadastroCandidato">Cadastrar Candidato</button></a></li>
+        <li><a href="pagePerfilEmpresa.html"><button class="listarEmpresas">Perfil Empresas</button></a></li>
+        <li><a href="pagePerfilCandidato.html"><button class="listarCandidatos">Pefil Candidatos</button></a></li>
+      </ul>
+
+    </nav>
+
+  </div>
+
+</header>
+<section id="pageCadastro">
+  <form>
+    <div class = "cadastro">
+      <h2>Preencha os campos abaixo para se cadastrar</h2>
+
+      <label>Nome:
+        <input type="text" id="nome" required="required"/>
+      </label>
+      <label>CPF:
+        <input type="number" id="cpf" required="required"/>
+      </label>
+      <label>Email:
+        <input type="text" id="email" required="required"/>
+      </label>
+      <div id = 'checkboxes'>
+        Marque as opções correspondentes as tecnologias que você desenvolve:
+        <p></p>
+        <input type="checkbox" id="java" name="linguagem" value="java">
+        <label for="java">Java</label>
+
+        <input type="checkbox" id="python" name="linguagem" value="python">
+        <label for="python">Python</label>
+
+        <input type="checkbox" id="javascript" name="linguagem" value="javascript">
+        <label for="javascript">JavaScript</label>
+
+        <input type="checkbox" id="csharp" name="linguagem" value="csharp">
+        <label for="csharp">C#</label>
+
+        <input type="checkbox" id="php" name="linguagem" value="php">
+        <label for="php">PHP</label>
+
+        <input type="checkbox" id="ruby" name="linguagem" value="ruby">
+        <label for="ruby">Ruby</label>
+
+        <input type="checkbox" id="go" name="linguagem" value="go">
+        <label for="go">Angular</label>
+
+        <input type="checkbox" id="swift" name="linguagem" value="swift">
+        <label for="swift">Swift</label>
+
+        <input type="checkbox" id="typescript" name="linguagem" value="typescript">
+        <label for="typescript">TypeScript</label>
+      </div>
+      <label>Cep:
+        <input type="number" id="cep" required="required"/>
+      </label>
+      <label>Estado:
+        <input type="text" id="estado" required="required"/>
+      </label>
+      <label> Descrição: (Se descreva de forma bem intuitiva, pois este será um dos principais atribuitos que nossas empresas parceiras verão)</br>
+        <textarea id = "descricao" placeholder="Descreva aqui seu momento atual, quem é voce, se está estudando ou trabalhando em alguma função"></textarea>
+      </label>
+      <button id="button-adicionar">
+        Cadastrar Funcionario
+      </button>
+    </div>
+  </form>
+</section>
+  <script>var exports = {};</script>
+  <script src="main.min.js"></script>
+</body>
+</html>

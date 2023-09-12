@@ -1,0 +1,135 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0 0 0 0;
+}
+
+header {
+  position: relative;
+  background:	#1e3038;
+  padding: 1px 0;
+  color: white;
+  margin: 0 0 0 0;
+}
+
+.caixa {
+  display: inline-flex;
+  position:relative;
+  width: 90%;
+
+}
+h1 {
+  background-image: linear-gradient(to bottom, rebeccapurple, steelblue, turquoise);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: black;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+nav {
+  background: #1e3038;
+  position:absolute;
+  right: 0;
+}
+
+
+nav li {
+  display: inline;
+  margin: 50px 20px 0 20px;
+
+}
+
+nav ul {
+  margin-top: 20px;
+  padding-top: 15px;
+
+}
+
+nav a {
+  text-transform: uppercase;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-decoration: none;
+
+}
+
+button {
+  text-transform: uppercase;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  background: #1e3038;
+  border: none;
+}
+
+nav li :hover {
+  color: #1a8099;
+  text-decoration: underline;
+}
+
+/* Estilos para o formulário de cadastro */
+#pageCadastro {
+  text-align: center;
+  padding: 20px;
+}
+
+.cadastro {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 70%;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 10px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#checkboxes {
+  text-align: justify;
+  display: flow-root;
+}
+
+#checkboxes input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+button#button-adicionar {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button#button-adicionar:hover {
+  background-color: #0056b3;
+}
+
