@@ -4,12 +4,12 @@ export class CadastroEmpresa {
 }
 document.addEventListener('DOMContentLoaded',() => {
 
-  let nomeEmpresa = document.getElementById('nome') as HTMLInputElement;
-  let emailEmpresa = document.getElementById('email') as HTMLInputElement;
-  let cnpjEmpresa = document.getElementById('cnpj') as HTMLInputElement;
-  let cepEmpresa = document.getElementById('cep') as HTMLInputElement;
-  let estadoEmpresa = document.getElementById('estado') as HTMLInputElement;
-  let descricaoEmpresa = document.getElementById('descricao') as HTMLInputElement;
+  const nomeEmpresa = document.getElementById('nome') as HTMLInputElement;
+  const emailEmpresa = document.getElementById('email') as HTMLInputElement;
+  const cnpjEmpresa = document.getElementById('cnpj') as HTMLInputElement;
+  const cepEmpresa = document.getElementById('cep') as HTMLInputElement;
+  const estadoEmpresa = document.getElementById('estado') as HTMLInputElement;
+  const descricaoEmpresa = document.getElementById('descricao') as HTMLInputElement;
 
   let linguagensSelecionadas: string[] = [];
 

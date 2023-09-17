@@ -1,12 +1,12 @@
 import Candidato from "./candidato";
 document.addEventListener('DOMContentLoaded',() => {
 
-  let nomeCandidato = document.getElementById('nome') as HTMLInputElement;
-  let emailCandidato = document.getElementById('email') as HTMLInputElement;
-  let cpfCandidato = document.getElementById('cpf') as HTMLInputElement;
-  let cepCandidato  = document.getElementById('cep') as HTMLInputElement;
-  let estadoCandidato  = document.getElementById('estado') as HTMLInputElement;
-  let descricaoCandidato  = document.getElementById('descricao') as HTMLInputElement;
+  const nomeCandidato = document.getElementById('nome') as HTMLInputElement;
+  const emailCandidato = document.getElementById('email') as HTMLInputElement;
+  const cpfCandidato = document.getElementById('cpf') as HTMLInputElement;
+  const cepCandidato  = document.getElementById('cep') as HTMLInputElement;
+  const estadoCandidato  = document.getElementById('estado') as HTMLInputElement;
+  const descricaoCandidato  = document.getElementById('descricao') as HTMLInputElement;
 
   let botaoSalvaCandidato = document.getElementById('button-adicionar') as HTMLElement;
 
@@ -80,6 +80,8 @@ document.addEventListener('DOMContentLoaded',() => {
     console.log(newCandidato);
 
     saveCandidato(newCandidato);
+
+    alert("Candidato cadastrado com sucesso.");
   });
 
 //Função
