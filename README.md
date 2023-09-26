@@ -15,4 +15,15 @@ adicionar um novo candidato e listar as empresesa e os candidatos que já estão
 
 Digiando o numero a qual a opção desejada esta a frente.
 
+Foi introduzio da modelagem do banco de dados, o mesmo foi realizado na plataforma https://dbdiagram.io/
+
+Onde foram criados as tabelas pais, competencias, empresas, candidatos, vagas, empresa_skills, usuario_skills e matches:
+
+
+![Untitled](https://github.com/JoaquimLuan/Linketinder/assets/109047479/b086262a-e579-462b-91e2-73a70fa1df56)
+
+Foi utilizado o banco de dados Postegresql
+
+
+
 
