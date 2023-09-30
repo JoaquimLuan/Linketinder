@@ -19,8 +19,9 @@ Foi introduzio da modelagem do banco de dados, o mesmo foi realizado na platafor
 
 Onde foram criados as tabelas pais, competencias, empresas, candidatos, vagas, vagas_skills, empresa_skills, usuario_skills e matches:
 
+![linketinder](https://github.com/JoaquimLuan/Linketinder/assets/109047479/ac1d87b3-8275-4983-aea1-2ccd26692174)
 
-![linketinder.png](..%2FCursos%2Fcurso%20de%20Banco%20de%20dados%2Flinketinder.png)
+
 
 Foi utilizado o banco de dados Postegresql
 
