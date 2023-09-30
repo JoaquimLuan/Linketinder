@@ -1,99 +1,111 @@
 package org.example.usuarios
 
+import java.text.ParseException
+import java.text.SimpleDateFormat
+
 class Candidato extends Pessoa {
-    int idade
+    String sobrenome
+    Date dataNascimento
     long cpf
-    List <String> competencias
 
 
-    Candidato(String nome, String email, long cpf, int idade, String estado, int cep, String descricao, List<String> competencias) {
-        super(nome, email, estado, cep, descricao)
-        this.idade = idade
+
+    Candidato(String nome, String sobrenome, Date dataNascimento, String email, long cpf, int cep, String pais) {
+        super(nome, email, cep,  pais)
+        this.sobrenome = sobrenome
+        this.dataNascimento = dataNascimento
         this.cpf = cpf
-        this.competencias = competencias
     }
 
-    static def listarCandidatos(candidatos) {
-        println("\nLista de Candidatos:")
-        candidatos.each { candidato ->
-            println("Nome: ${candidato.nome}")
-            println("Email: ${candidato.email}")
-            println("Idade: ${candidato.idade}")
-            println("Estado: ${candidato.estado}")
-            println("CEP: ${candidato.cep}")
-            println("Descrição: ${candidato.descricao}")
-            println("Competências: ${candidato.competencias.join(', ')}")
-            println()
-        }
 
-        println("\nCandidatos armazenados no arquivo:")
-        def candidatosArquivo = new File("candidatos.txt")
-        println(candidatosArquivo.text)
+    static void adicionarCandidato(List<Candidato> candidatos, Scanner scanner) {
+        String regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]{1,30}$/
+        String regexSobrenome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]{1,30}$/
+        String regexNascimento = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/
+        String regexEmail = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'
+        String regexCpf = /^\d{11}$/
+        String regexCep = /^\d{8}$/
+        String regexPais = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]{1,30}$/
+
+        String nome = validarEntrada(regexNome, "Nome: ", scanner);
+        String sobrenome = validarEntrada(regexSobrenome, "Sobrenome: ", scanner);
+        Date dataNascimento = validarEntradaData(regexNascimento, "Data de nascimento (formato dd-MM-yyyy): ", scanner);
+        String email = validarEntrada(regexEmail, "Email: ", scanner);
+        long cpf = Long.parseLong(validarEntrada(regexCpf, "CPF: ", scanner))
+        int cep = validarEntrada(regexCep, "CEP: ", scanner) as int
+        String pais = validarEntrada(regexPais, "País: ", scanner);
+
+        Candidato candidato = new Candidato(nome, sobrenome, dataNascimento, email, cpf, cep, pais);
+        candidatos.add(candidato);
     }
 
-    static def validarEntrada(regex, String mensagem, scanner) {
+    static String validarEntrada(String regex, String mensagem, Scanner scanner) {
         while (true) {
-            print(mensagem)
-            def entrada = scanner.nextLine()
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine();
 
             if (entrada.matches(regex)) {
-                return entrada
+                return entrada;
             } else {
-                println("Entrada inválida. Por favor, insira uma entrada válida.")
+                System.out.println("Entrada inválida. Por favor, insira uma entrada válida.");
             }
         }
     }
 
-    static def adicionarCandidatos(candidatos, scanner) {
-        def regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]{1,35}$/
-        def regexEmail = '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'
-        def regexCpf = /^\d{11}$/
-        def regexIdade = /^(1[8-9]|[2-9][0-9])$/
-        def regexEstado = /^[a-zA-Z]{2}$/
-        def regexCep = /^\d{8}$/
-        def regexDescricao = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]{1,35}$/
+    static Date validarEntradaData(String regex, String mensagem, Scanner scanner) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        while (true) {
+            System.out.print(mensagem);
+            String entrada = scanner.nextLine();
 
-        def nome = validarEntrada(regexNome, "Nome: ", scanner)
-        def email = validarEntrada(regexEmail, "Email: ", scanner)
-        def cpf = validarEntrada(regexCpf, "CPF: ", scanner) as long
-        def idade = validarEntrada(regexIdade, "Idade: ", scanner)as int
-        def estado = validarEntrada(regexEstado, "Estado: ", scanner)
-        def cep = validarEntrada(regexCep, "CEP: ", scanner) as int
-        def descricao = validarEntrada(regexDescricao, "Descrição: ", scanner)
-
-        print("Competências (separadas por vírgula): ")
-        Scanner entrada = new Scanner(System.in)
-        def competenciasEntrada = entrada.nextLine()
-
-        def competencias =  competenciasEntrada.split(',').collect { it.trim() }
-
-        adicionarCandidato(candidatos, nome, email, cpf, idade, estado, cep, descricao, competencias)
-        salvarCandidatosEmArquivo(candidatos)
-        println("Candidato adicionado com sucesso!\n")
-    }
-
-    static def adicionarCandidato(candidatos, nome, email, cpf, idade, estado, cep, descricao, competencias) {
-        def candidato = new Candidato(nome, email, cpf, idade, estado, cep, descricao, competencias as List)
-        candidatos << candidato
-        return candidato
-    }
-
-    static void salvarCandidatosEmArquivo(candidatos) {
-        def candidatosArquivo = new File("candidatos.txt")
-        candidatosArquivo.withWriterAppend { writer ->
-            candidatos.each { candidato ->
-                writer << "Candidato\n"
-                writer << "Nome:${candidato.nome}\n"
-                writer << "Email:${candidato.email}\n"
-                writer << "CPF:${candidato.cpf}\n"
-                writer << "Idade:${candidato.idade}\n"
-                writer << "Estado:${candidato.estado}\n"
-                writer << "CEP:${candidato.cep}\n"
-                writer << "Descrição:${candidato.descricao}\n"
-                writer << "Competências:${candidato.competencias.join(', ')}\n\n"
+            if (entrada.matches(regex)) {
+                try {
+                    return sdf.parse(entrada);
+                } catch (ParseException e) {
+                    System.err.println("Formato de data inválido. Use o formato dd-MM-yyyy.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Por favor, insira uma data válida.");
             }
         }
     }
 
+    // Foi implementado persistencia no BD
+//    static void salvarCandidatosEmArquivo(candidatos) {
+//        def candidatosArquivo = new File("candidatos.txt")
+//        candidatosArquivo.withWriterAppend { writer ->
+//            candidatos.each { candidato ->
+//                writer << "Candidato\n"
+//                writer << "Nome:${candidato.nome}\n"
+//                writer << "Email:${candidato.email}\n"
+//                writer << "CPF:${candidato.cpf}\n"
+//                writer << "Idade:${candidato.idade}\n"
+//                writer << "Estado:${candidato.estado}\n"
+//                writer << "CEP:${candidato.cep}\n"
+//                writer << "Descrição:${candidato.descricao}\n"
+//                writer << "Competências:${candidato.competencias.join(', ')}\n\n"
+//            }
+//        }
+//    }
+
+    // Foi implementado persistencia no BD
+
+//    static def listarCandidatos(candidatos) {
+//        println("\nLista de Candidatos:")
+//        candidatos.each { candidato ->
+//            println("Nome: ${candidato.nome}")
+//            println("Email: ${candidato.email}")
+//            println("Idade: ${candidato.idade}")
+//            println("Estado: ${candidato.estado}")
+//            println("CEP: ${candidato.cep}")
+//            println("Descrição: ${candidato.descricao}")
+//            println("Competências: ${candidato.competencias.join(', ')}")
+//            println()
+//        }
+//
+//        println("\nCandidatos armazenados no arquivo:")
+//        def candidatosArquivo = new File("candidatos.txt")
+//        println(candidatosArquivo.text)
+//    }
 
 }

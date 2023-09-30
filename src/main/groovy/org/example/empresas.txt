@@ -68,3 +68,13 @@ CEP:76888999
 Descrição:Joias raras
 Competências Esperadas:java, groovy
 
+Empresa
+Nome:br turbo
+Email Corporativo:br@gmail.com
+CNPJ:34566677733345
+País:Brasil
+Estado:GO
+CEP:78999000
+Descrição:Br turbo Brasil
+Competências Esperadas:java, groovy
+

@@ -17,10 +17,10 @@ Digiando o numero a qual a opção desejada esta a frente.
 
 Foi introduzio da modelagem do banco de dados, o mesmo foi realizado na plataforma https://dbdiagram.io/
 
-Onde foram criados as tabelas pais, competencias, empresas, candidatos, vagas, empresa_skills, usuario_skills e matches:
+Onde foram criados as tabelas pais, competencias, empresas, candidatos, vagas, vagas_skills, empresa_skills, usuario_skills e matches:
 
 
-![Untitled](https://github.com/JoaquimLuan/Linketinder/assets/109047479/b086262a-e579-462b-91e2-73a70fa1df56)
+![linketinder.png](..%2FCursos%2Fcurso%20de%20Banco%20de%20dados%2Flinketinder.png)
 
 Foi utilizado o banco de dados Postegresql
 
