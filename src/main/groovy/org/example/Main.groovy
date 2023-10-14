@@ -12,9 +12,9 @@ static void main(String[] args) {
         println("\nEscolha uma opção:")
         println("1 - Listar Candidatos")
         println("2 - Listar Empresas")
-        println("3 - Adicionar Candidato")
-        println("4 - Adicionar Empresas")
-        println("5 - Listar vagas")
+        println("3 - Listar vagas")
+        println("4 - Adicionar Candidato")
+        println("5 - Adicionar Empresas")
         println("6 - Adicionar vaga")
         println("7 - Deletar Candidato")
         println("8 - Deletar Empresa")
@@ -30,13 +30,13 @@ static void main(String[] args) {
                 EmpresaBd.listarEmpresas()
                 break
             case "3":
-                CandidatoBd.inserirCandidato()
+                VagasBd.listarVagas()
                 break
             case "4":
-                EmpresaBd.inserirEmpresa()
+                CandidatoBd.inserirCandidato()
                 break
             case "5":
-                VagasBd.listarVagas()
+                EmpresaBd.inserirEmpresa()
                 break
             case "6":
                 VagasBd.inserirVaga()

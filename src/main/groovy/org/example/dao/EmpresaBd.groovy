@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.dao.Coneccao
+import org.example.usuarios.Candidato
 import org.example.usuarios.Empresa
 
 import java.sql.Connection;
@@ -14,7 +15,8 @@ class EmpresaBd {
     static Scanner teclado = new Scanner(System.in);
 
     static void listarEmpresas() {
-        String BUSCAR_TODOS = "SELECT e.id, e.nome, e.cnpj, e.email, e.cep, p.nome AS nome_pais, e.vagas FROM empresas AS e, pais AS p WHERE e.id_pais = p.id;";
+
+        String BUSCAR_TODOS = "SELECT e.id, e.nome, e.cnpj, e.email, e.cep, p.nome AS nome_pais FROM empresas AS e, pais AS p WHERE e.id_pais = p.id;";
 
         try {
             Connection conn = Coneccao.conectar();
@@ -39,7 +41,6 @@ class EmpresaBd {
                     System.out.println("Email: " + res.getString(4));
                     System.out.println("CEP: " + res.getString(5));
                     System.out.println("Pais: " + res.getString(6));
-                    System.out.println("Vagas: " + res.getString(7));
                     System.out.println("------------------------");
                 }
             } else {
@@ -47,55 +48,30 @@ class EmpresaBd {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Erro ao buscar toda a lista");
+            System.err.println("Erro ao buscar toda a lista", e);
             System.exit(-42);
         }
     }
 
     static void inserirEmpresa() {
+
         List<Empresa> empresas = new ArrayList<>();
 
-        adicionarEmpresas(empresas, teclado);
+        System.out.println("Adicionar Empresa:");
+        Empresa.adicionarEmpresas(empresas, teclado);
 
         try {
             Connection conn = Coneccao.conectar();
 
             for (Empresa empresa : empresas) {
-                int idPais = verificarPais(conn, empresa.getPais());
-
-                if (idPais == -1) {
-                    idPais = inserirPais(conn, empresa.getPais());
-                }
-
+                int idPais = Pais.verificarEInserir(conn, empresa.getPais(), "pais");
                 int idEmpresa = inserirEmpresa(conn, empresa, idPais);
 
                 boolean continuar = true;
 
                 while (continuar) {
-                    System.out.println("Deseja adicionar competência? (S/N): ");
-                    String resposta = teclado.nextLine();
-
-                    if (resposta.equalsIgnoreCase("S")) {
-                        System.out.println("Informe o nome da competência: ");
-                        String nomeCompetencia = teclado.nextLine();
-
-                        int idCompetencias = verificarCompetencia(conn, nomeCompetencia);
-
-                        if (idCompetencias == -1) {
-                            idCompetencias = inserirCompetencia(conn, nomeCompetencia);
-                        }
-
-                        inserirHabilidadeEmpresa(conn, idEmpresa, idCompetencias);
-
-                        System.out.println("Competência adicionada com sucesso!");
-                    } else if (resposta.equalsIgnoreCase("N")) {
-                        continuar = false;
-                    } else {
-                        System.out.println("Opção inválida. Digite 'S' para adicionar competência ou 'N' para finalizar.");
-                    }
+                    continuar = Competencias.adicionarCompetencia(teclado, conn, idEmpresa, "empresa");
                 }
-
-                Coneccao.desconectar(conn);
 
                 System.out.println("A empresa " + empresa.getNome() + " foi inserida com sucesso!");
             }
@@ -106,32 +82,6 @@ class EmpresaBd {
             System.err.println("Erro ao inserir empresa");
             System.exit(-42);
         }
-    }
-
-    static int verificarPais(Connection conn, String nomePais) throws SQLException {
-        String verificarPaisSQL = "SELECT id FROM pais WHERE nome = ?";
-        PreparedStatement verificarPaisStmt = conn.prepareStatement(verificarPaisSQL);
-        verificarPaisStmt.setString(1, nomePais);
-        ResultSet paisResultSet = verificarPaisStmt.executeQuery();
-
-        if (paisResultSet.next()) {
-            return paisResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static int inserirPais(Connection conn, String nomePais) throws SQLException {
-        String inserirPaisSQL = "INSERT INTO pais (nome) VALUES (?) RETURNING id";
-        PreparedStatement inserirPaisStmt = conn.prepareStatement(inserirPaisSQL);
-        inserirPaisStmt.setString(1, nomePais);
-        ResultSet novoPaisResultSet = inserirPaisStmt.executeQuery();
-
-        if (novoPaisResultSet.next()) {
-            return novoPaisResultSet.getInt("id");
-        }
-
-        return -1;
     }
 
     static int inserirEmpresa(Connection conn, Empresa empresa, int idPais) throws SQLException {
@@ -154,42 +104,6 @@ class EmpresaBd {
         inserirEmpresaStmt.close();
 
         return idEmpresa;
-    }
-
-    static int verificarCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
-        String verificarCompetenciaSQL = "SELECT id FROM competencias WHERE nome = ?";
-        PreparedStatement verificarCompetenciaStmt = conn.prepareStatement(verificarCompetenciaSQL);
-        verificarCompetenciaStmt.setString(1, nomeCompetencia);
-        ResultSet competenciaResultSet = verificarCompetenciaStmt.executeQuery();
-
-        if (competenciaResultSet.next()) {
-            return competenciaResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static int inserirCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
-        String inserirCompetenciaSQL = "INSERT INTO competencias (nome) VALUES (?) RETURNING id";
-        PreparedStatement inserirCompetenciaStmt = conn.prepareStatement(inserirCompetenciaSQL);
-        inserirCompetenciaStmt.setString(1, nomeCompetencia);
-        ResultSet novaCompetenciaResultSet = inserirCompetenciaStmt.executeQuery();
-
-        if (novaCompetenciaResultSet.next()) {
-            return novaCompetenciaResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static void inserirHabilidadeEmpresa(Connection conn, int idEmpresa, int idCompetencia) throws SQLException {
-        String inserirHabilidadeSQL = "INSERT INTO empresa_skills (id_empresa, id_competencias) VALUES (?, ?)";
-        PreparedStatement inserirHabilidadeStmt = conn.prepareStatement(inserirHabilidadeSQL);
-        inserirHabilidadeStmt.setInt(1, idEmpresa);
-        inserirHabilidadeStmt.setInt(2, idCompetencia);
-
-        inserirHabilidadeStmt.executeUpdate();
-        inserirHabilidadeStmt.close();
     }
 
     static void deletarEmpresa() {
@@ -237,13 +151,4 @@ class EmpresaBd {
         }
     }
 
-    static void adicionarEmpresas(List<Empresa> empresas, Scanner scanner) {
-        System.out.println("Quantas empresas deseja adicionar?");
-        int quantidade = Integer.parseInt(scanner.nextLine());
-
-        for (int i = 0; i < quantidade; i++) {
-            System.out.println("Empresa " + (i + 1) + ":");
-            Empresa.adicionarEmpresas(empresas, scanner);
-        }
-    }
 }

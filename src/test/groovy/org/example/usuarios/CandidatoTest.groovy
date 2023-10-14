@@ -2,35 +2,34 @@ package org.example.usuarios
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test
+
+import java.text.SimpleDateFormat;
 
 
-public class CandidatoTest {
+class CandidatoTest {
 
     private List<Candidato> candidatos;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         candidatos = new ArrayList<>();
     }
 
     @Test
-    public void testAdicionarCandidato() {
-        List<String> competencias = new ArrayList<>();
-        competencias.add("Java");
-        competencias.add("Python");
-        competencias.add("SQL");
+    void testAdicionarCandidato() {
 
-        Candidato.adicionarCandidato(candidatos, "João", "joao@example.com", 12345678901L, 25, "SP", 12345678, "Descrição", competencias);
+        Scanner scanner = new Scanner("João\nMartins\n14-08-1990\njoao@example.com\n12345678901\n12345678\nBrazil\n");
+
+        Candidato.adicionarCandidato(candidatos, scanner);
 
         Assertions.assertEquals(1, candidatos.size());
         Assertions.assertEquals("João", candidatos.get(0).getNome());
+        Assertions.assertEquals("Martins", candidatos.get(0).getSobrenome());
+        Assertions.assertEquals("14-08-1990", new SimpleDateFormat("dd-MM-yyyy").format(candidatos.get(0).getDataNascimento()));
         Assertions.assertEquals("joao@example.com", candidatos.get(0).getEmail());
         Assertions.assertEquals(12345678901L, candidatos.get(0).getCpf());
-        Assertions.assertEquals(25, candidatos.get(0).getIdade());
-        Assertions.assertEquals("SP", candidatos.get(0).getEstado());
         Assertions.assertEquals(12345678, candidatos.get(0).getCep());
-        Assertions.assertEquals("Descrição", candidatos.get(0).getDescricao());
-        Assertions.assertEquals(competencias, candidatos.get(0).getCompetencias());
+        Assertions.assertEquals("Brazil", candidatos.get(0).getPais());
     }
 }

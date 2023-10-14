@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 import org.example.usuarios.Candidato;
 
 class CandidatoBd {
@@ -13,6 +12,7 @@ class CandidatoBd {
     static Scanner teclado = new Scanner(System.in);
 
     static void listarCandidato() {
+
         String BUSCAR_TODOS = "SELECT c.id, c.nome, c.sobrenome, c.data_nascimento, c.email, c.cpf, c.cep, p.nome AS nome_pais\n" +
                 "FROM candidatos AS c, pais AS p\n" +
                 "WHERE c.id_pais = p.id;";
@@ -58,44 +58,20 @@ class CandidatoBd {
     static void inserirCandidato() {
         List<Candidato> candidatos = new ArrayList<>();
 
-        adicionarCandidatos(candidatos, teclado);
+        System.out.println("Adicionar Candidato:");
+        Candidato.adicionarCandidato(candidatos, teclado);
 
         try {
             Connection conn = Coneccao.conectar();
 
             for (Candidato candidato : candidatos) {
-                int idPais = verificarPais(conn, candidato.getPais());
-
-                if (idPais == -1) {
-                    idPais = inserirPais(conn, candidato.getPais());
-                }
-
+                int idPais = Pais.verificarEInserir(conn, candidato.getPais(), "pais");
                 int idCandidato = inserirCandidato(conn, candidato, idPais);
 
                 boolean continuar = true;
 
                 while (continuar) {
-                    System.out.println("Deseja adicionar competência? (S/N): ");
-                    String resposta = teclado.nextLine();
-
-                    if (resposta.equalsIgnoreCase("S")) {
-                        System.out.println("Informe o nome da competência: ");
-                        String nomeCompetencia = teclado.nextLine();
-
-                        int idCompetencias = verificarCompetencia(conn, nomeCompetencia);
-
-                        if (idCompetencias == -1) {
-                            idCompetencias = inserirCompetencia(conn, nomeCompetencia);
-                        }
-
-                        inserirHabilidadeCandidato(conn, idCandidato, idCompetencias);
-
-                        System.out.println("Competência adicionada com sucesso!");
-                    } else if (resposta.equalsIgnoreCase("N")) {
-                        continuar = false;
-                    } else {
-                        System.out.println("Opção inválida. Digite 'S' para adicionar competência ou 'N' para finalizar.");
-                    }
+                    continuar = Competencias.adicionarCompetencia(teclado, conn, idCandidato, "candidato");
                 }
 
                 Coneccao.desconectar(conn);
@@ -109,32 +85,6 @@ class CandidatoBd {
             System.err.println("Erro ao inserir candidato");
             System.exit(-42);
         }
-    }
-
-    static int verificarPais(Connection conn, String nomePais) throws SQLException {
-        String verificarPaisSQL = "SELECT id FROM pais WHERE nome = ?";
-        PreparedStatement verificarPaisStmt = conn.prepareStatement(verificarPaisSQL);
-        verificarPaisStmt.setString(1, nomePais);
-        ResultSet paisResultSet = verificarPaisStmt.executeQuery();
-
-        if (paisResultSet.next()) {
-            return paisResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static int inserirPais(Connection conn, String nomePais) throws SQLException {
-        String inserirPaisSQL = "INSERT INTO pais (nome) VALUES (?) RETURNING id";
-        PreparedStatement inserirPaisStmt = conn.prepareStatement(inserirPaisSQL);
-        inserirPaisStmt.setString(1, nomePais);
-        ResultSet novoPaisResultSet = inserirPaisStmt.executeQuery();
-
-        if (novoPaisResultSet.next()) {
-            return novoPaisResultSet.getInt("id");
-        }
-
-        return -1;
     }
 
     static int inserirCandidato(Connection conn, Candidato candidato, int idPais) throws SQLException {
@@ -162,43 +112,7 @@ class CandidatoBd {
         return idCandidato;
     }
 
-    static int verificarCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
-        String verificarCompetenciaSQL = "SELECT id FROM competencias WHERE nome = ?";
-        PreparedStatement verificarCompetenciaStmt = conn.prepareStatement(verificarCompetenciaSQL);
-        verificarCompetenciaStmt.setString(1, nomeCompetencia);
-        ResultSet competenciaResultSet = verificarCompetenciaStmt.executeQuery();
-
-        if (competenciaResultSet.next()) {
-            return competenciaResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static int inserirCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
-        String inserirCompetenciaSQL = "INSERT INTO competencias (nome) VALUES (?) RETURNING id";
-        PreparedStatement inserirCompetenciaStmt = conn.prepareStatement(inserirCompetenciaSQL);
-        inserirCompetenciaStmt.setString(1, nomeCompetencia);
-        ResultSet novaCompetenciaResultSet = inserirCompetenciaStmt.executeQuery();
-
-        if (novaCompetenciaResultSet.next()) {
-            return novaCompetenciaResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static void inserirHabilidadeCandidato(Connection conn, int idCandidato, int idCompetencia) throws SQLException {
-        String inserirHabilidadeSQL = "INSERT INTO usuario_skills (id_candidatos, id_competencias) VALUES (?, ?)";
-        PreparedStatement inserirHabilidadeStmt = conn.prepareStatement(inserirHabilidadeSQL);
-        inserirHabilidadeStmt.setInt(1, idCandidato);
-        inserirHabilidadeStmt.setInt(2, idCompetencia);
-
-        inserirHabilidadeStmt.executeUpdate();
-        inserirHabilidadeStmt.close();
-    }
-
-    static void deletarCandidato() {
+    static deletarCandidato() {
 
         String BUSCAR_POR_NOME = "SELECT id FROM candidatos WHERE nome=?";
         String DELETAR_CANDIDATO = "DELETE FROM candidatos WHERE id=?";
@@ -232,25 +146,18 @@ class CandidatoBd {
 
                 Coneccao.desconectar(conn);
                 System.out.println("Candidato e suas competências foram deletados com sucesso!!");
+                return true;
             } else {
                 System.out.println("Não existe candidato com o nome informado.");
+                return false;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Não foi possível deletar o candidato e suas competências");
             System.exit(-42);
+            return false;
         }
     }
 
-
-    static void adicionarCandidatos(List<Candidato> candidatos, Scanner scanner) {
-        System.out.println("Quantos candidatos deseja adicionar?");
-        int quantidade = Integer.parseInt(scanner.nextLine());
-
-        for (int i = 0; i < quantidade; i++) {
-            System.out.println("Candidato " + (i + 1) + ":");
-            Candidato.adicionarCandidato(candidatos, scanner);
-        }
-    }
 }

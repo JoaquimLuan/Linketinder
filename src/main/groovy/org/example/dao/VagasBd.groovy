@@ -1,9 +1,11 @@
 package org.example.dao
 
+import org.example.usuarios.Candidato
+import org.example.usuarios.Vaga
+
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.sql.SQLException
 
 class VagasBd {
 
@@ -16,12 +18,12 @@ class VagasBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement candidatos = conn.prepareStatement(
+            PreparedStatement vagas = conn.prepareStatement(
                     BUSCAR_TODOS,
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY
             );
-            ResultSet res = candidatos.executeQuery();
+            ResultSet res = vagas.executeQuery();
 
             res.last();
             int qtd = res.getRow();
@@ -51,120 +53,79 @@ class VagasBd {
 
     static void inserirVaga() {
 
-        System.out.println("Informe o nome da vaga: ");
-        String nomeVaga = teclado.nextLine();
+        List<Vaga> vagas = new ArrayList<>()
 
-        System.out.println("Informe a descrição da vaga: ");
-        String descricao = teclado.nextLine();
+        System.out.println("Adicionar vaga:");
 
-        System.out.println("Informe o salário: ");
-        double salario = teclado.nextDouble();
-        teclado.nextLine();
+        Vaga.adicionarVaga(vagas, teclado);
 
-        System.out.println("Informe nome da empresa: ");
-        String nomeEmpresa = teclado.nextLine();
+        String nomeEmpresa = vagas[0].empresa
 
-
-        String consultarIdEmpresa = 'SELECT id FROM empresas WHERE nome = ?'
-        int idEmpresa = consultarIdEmpresa(nomeEmpresa);
+        int idEmpresa = consultarIdEmpresa(nomeEmpresa)
 
         if (idEmpresa != -1) {
-            String INSERIR_VAGA = "INSERT INTO vagas (nome, descricao, salario, id_empresa) VALUES (?, ?, ?, ?) RETURNING id";
+            String INSERIR_VAGA = "INSERT INTO vagas (nome, descricao, salario, id_empresa) VALUES (?, ?, ?, ?) RETURNING id"
 
             try {
-                Connection conn = Coneccao.conectar();
-                PreparedStatement salvarVaga = conn.prepareStatement(INSERIR_VAGA, PreparedStatement.RETURN_GENERATED_KEYS);
+                Connection conn = Coneccao.conectar()
+                PreparedStatement salvarVaga = conn.prepareStatement(INSERIR_VAGA, PreparedStatement.RETURN_GENERATED_KEYS)
 
-                salvarVaga.setString(1, nomeVaga);
-                salvarVaga.setString(2, descricao);
-                salvarVaga.setDouble(3, salario);
-                salvarVaga.setInt(4, idEmpresa);
+                salvarVaga.setString(1, vagas[0].nome)
+                salvarVaga.setString(2, vagas[0].descricao)
+                salvarVaga.setDouble(3, vagas[0].salario)
+                salvarVaga.setInt(4, idEmpresa)
 
-                salvarVaga.executeUpdate();
+                salvarVaga.executeUpdate()
 
-                ResultSet generatedKeys = salvarVaga.getGeneratedKeys();
-                int idVaga = -1;
+                ResultSet generatedKeys = salvarVaga.getGeneratedKeys()
+                int idVaga = -1
                 if (generatedKeys.next()) {
-                    idVaga = generatedKeys.getInt(1);
+                    idVaga = generatedKeys.getInt(1)
                 }
 
-                salvarVaga.close();
+                salvarVaga.close()
 
-                boolean continuar = true;
+                boolean continuar = true
 
                 while (continuar) {
-                    System.out.println("Deseja adicionar competência à vaga? (S/N): ");
-                    String resposta = teclado.nextLine();
-
-                    if (resposta.equalsIgnoreCase("S")) {
-                        System.out.println("Informe o nome da competência: ");
-                        String nomeCompetencia = teclado.nextLine();
-
-                        int idCompetencia = verificarCompetencia(conn, nomeCompetencia);
-
-                        if (idCompetencia == -1) {
-                            idCompetencia = inserirCompetencia(conn, nomeCompetencia);
-                        }
-
-                        inserirHabilidadeVaga(conn, idVaga, idCompetencia);
-
-                        System.out.println("Competência adicionada à vaga com sucesso!");
-                    } else if (resposta.equalsIgnoreCase("N")) {
-                        continuar = false;
-                    } else {
-                        System.out.println("Opção inválida. Digite 'S' para adicionar competência ou 'N' para finalizar.");
-                    }
+                    continuar = Competencias.adicionarCompetencia(teclado, conn, idVaga, "vaga");
                 }
 
-                Coneccao.desconectar(conn);
-                System.out.println("A vaga " + nomeVaga + " foi inserida com sucesso!");
+                Coneccao.desconectar(conn)
+                System.out.println("A vaga " + vagas[0].nome + " foi inserida com sucesso!")
 
             } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Erro ao inserir vaga");
-                System.exit(-42);
+                e.printStackTrace()
+                System.err.println("Erro ao inserir vaga")
+                System.exit(-42)
             }
         } else {
-            System.err.println("Empresa não encontrada. Certifique-se de que o nome da empresa está correto.");
+            System.err.println("Empresa não encontrada. Certifique-se de que o nome da empresa está correto.")
         }
     }
 
-    static int verificarCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
-        String verificarCompetenciaSQL = "SELECT id FROM competencias WHERE nome = ?";
-        PreparedStatement verificarCompetenciaStmt = conn.prepareStatement(verificarCompetenciaSQL);
-        verificarCompetenciaStmt.setString(1, nomeCompetencia);
-        ResultSet competenciaResultSet = verificarCompetenciaStmt.executeQuery();
+    static int consultarIdEmpresa(String nomeEmpresa) {
 
-        if (competenciaResultSet.next()) {
-            return competenciaResultSet.getInt("id");
+        String CONSULTAR_ID_EMPRESA = "SELECT id FROM empresas WHERE nome = ?"
+
+        try {
+            Connection conn = Coneccao.conectar()
+            PreparedStatement consulta = conn.prepareStatement(CONSULTAR_ID_EMPRESA)
+            consulta.setString(1, nomeEmpresa)
+            ResultSet resultado = consulta.executeQuery()
+
+            if (resultado.next()) {
+                return resultado.getInt("id")
+            } else {
+                return -1
+            }
+        } catch (Exception e) {
+            e.printStackTrace()
+            System.err.println("Erro ao consultar o ID da empresa")
+            System.exit(-42)
+            return -1
         }
-
-        return -1;
     }
-
-    static int inserirCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
-        String inserirCompetenciaSQL = "INSERT INTO competencias (nome) VALUES (?) RETURNING id";
-        PreparedStatement inserirCompetenciaStmt = conn.prepareStatement(inserirCompetenciaSQL);
-        inserirCompetenciaStmt.setString(1, nomeCompetencia);
-        ResultSet novaCompetenciaResultSet = inserirCompetenciaStmt.executeQuery();
-
-        if (novaCompetenciaResultSet.next()) {
-            return novaCompetenciaResultSet.getInt("id");
-        }
-
-        return -1;
-    }
-
-    static void inserirHabilidadeVaga(Connection conn, int idVaga, int idCompetencia) throws SQLException {
-        String inserirHabilidadeSQL = "INSERT INTO vagas_skills (id_vaga, id_competencia) VALUES (?, ?)";
-        PreparedStatement inserirHabilidadeStmt = conn.prepareStatement(inserirHabilidadeSQL);
-        inserirHabilidadeStmt.setInt(1, idVaga);
-        inserirHabilidadeStmt.setInt(2, idCompetencia);
-
-        inserirHabilidadeStmt.executeUpdate();
-        inserirHabilidadeStmt.close();
-    }
-
 
     static void deletarVaga() {
 
