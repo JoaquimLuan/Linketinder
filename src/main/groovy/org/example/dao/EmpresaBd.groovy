@@ -1,9 +1,7 @@
-package org.example.dao;
+package org.example.dao
 
-import org.example.dao.Coneccao
-import org.example.usuarios.Candidato
+
 import org.example.usuarios.Empresa
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,11 +18,7 @@ class EmpresaBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement empresas = conn.prepareStatement(
-                    BUSCAR_TODOS,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
+            PreparedStatement empresas = Coneccao.criarPreparedStatement(conn, BUSCAR_TODOS);
             ResultSet res = empresas.executeQuery();
 
             res.last();
@@ -64,7 +58,7 @@ class EmpresaBd {
             Connection conn = Coneccao.conectar();
 
             for (Empresa empresa : empresas) {
-                int idPais = Pais.verificarEInserir(conn, empresa.getPais(), "pais");
+                int idPais = Pais.vinculaPais(conn, empresa.getPais(), "pais");
                 int idEmpresa = inserirEmpresa(conn, empresa, idPais);
 
                 boolean continuar = true;
@@ -117,11 +111,7 @@ class EmpresaBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement buscaEmpresa = conn.prepareStatement(
-                    BUSCAR_POR_NOME,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
+            PreparedStatement buscaEmpresa = Coneccao.criarPreparedStatement(conn, BUSCAR_POR_NOME);
             buscaEmpresa.setString(1, nomeEmpresa);
             ResultSet res = buscaEmpresa.executeQuery();
 

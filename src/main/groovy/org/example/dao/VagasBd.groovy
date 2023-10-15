@@ -1,8 +1,6 @@
 package org.example.dao
 
-import org.example.usuarios.Candidato
 import org.example.usuarios.Vaga
-
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -18,11 +16,7 @@ class VagasBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement vagas = conn.prepareStatement(
-                    BUSCAR_TODOS,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
+            PreparedStatement vagas = Coneccao.criarPreparedStatement(conn, BUSCAR_TODOS);
             ResultSet res = vagas.executeQuery();
 
             res.last();
@@ -104,29 +98,6 @@ class VagasBd {
         }
     }
 
-    static int consultarIdEmpresa(String nomeEmpresa) {
-
-        String CONSULTAR_ID_EMPRESA = "SELECT id FROM empresas WHERE nome = ?"
-
-        try {
-            Connection conn = Coneccao.conectar()
-            PreparedStatement consulta = conn.prepareStatement(CONSULTAR_ID_EMPRESA)
-            consulta.setString(1, nomeEmpresa)
-            ResultSet resultado = consulta.executeQuery()
-
-            if (resultado.next()) {
-                return resultado.getInt("id")
-            } else {
-                return -1
-            }
-        } catch (Exception e) {
-            e.printStackTrace()
-            System.err.println("Erro ao consultar o ID da empresa")
-            System.exit(-42)
-            return -1
-        }
-    }
-
     static void deletarVaga() {
 
         String BUSCAR_POR_NOME_VAGA = "SELECT id FROM vagas WHERE nome=?";
@@ -138,11 +109,7 @@ class VagasBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement buscaVaga = conn.prepareStatement(
-                    BUSCAR_POR_NOME_VAGA,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
+            PreparedStatement buscaVaga = Coneccao.criarPreparedStatement(conn, BUSCAR_POR_NOME_VAGA);
             buscaVaga.setString(1, nomeVaga);
             ResultSet res = buscaVaga.executeQuery();
 
@@ -169,6 +136,29 @@ class VagasBd {
             e.printStackTrace();
             System.err.println("Não foi possível deletar a vaga e suas competências");
             System.exit(-42);
+        }
+    }
+
+    static int consultarIdEmpresa(String nomeEmpresa) {
+
+        String CONSULTAR_ID_EMPRESA = "SELECT id FROM empresas WHERE nome = ?"
+
+        try {
+            Connection conn = Coneccao.conectar()
+            PreparedStatement consulta = conn.prepareStatement(CONSULTAR_ID_EMPRESA)
+            consulta.setString(1, nomeEmpresa)
+            ResultSet resultado = consulta.executeQuery()
+
+            if (resultado.next()) {
+                return resultado.getInt("id")
+            } else {
+                return -1
+            }
+        } catch (Exception e) {
+            e.printStackTrace()
+            System.err.println("Erro ao consultar o ID da empresa")
+            System.exit(-42)
+            return -1
         }
     }
 

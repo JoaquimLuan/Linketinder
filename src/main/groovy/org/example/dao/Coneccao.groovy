@@ -31,6 +31,10 @@ class Coneccao {
         }
     }
 
+    static PreparedStatement criarPreparedStatement(Connection conn, String sql) throws SQLException {
+        return conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    }
+
     static void desconectar(Connection conn) {
         if(conn != null) {
             try {

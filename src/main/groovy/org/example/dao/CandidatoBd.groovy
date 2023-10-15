@@ -19,11 +19,7 @@ class CandidatoBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement candidatos = conn.prepareStatement(
-                    BUSCAR_TODOS,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
+            PreparedStatement candidatos = Coneccao.criarPreparedStatement(conn, BUSCAR_TODOS);
             ResultSet res = candidatos.executeQuery();
 
             res.last();
@@ -65,7 +61,7 @@ class CandidatoBd {
             Connection conn = Coneccao.conectar();
 
             for (Candidato candidato : candidatos) {
-                int idPais = Pais.verificarEInserir(conn, candidato.getPais(), "pais");
+                int idPais = Pais.vinculaPais(conn, candidato.getPais(), "pais");
                 int idCandidato = inserirCandidato(conn, candidato, idPais);
 
                 boolean continuar = true;
@@ -123,11 +119,7 @@ class CandidatoBd {
 
         try {
             Connection conn = Coneccao.conectar();
-            PreparedStatement buscaCandidato = conn.prepareStatement(
-                    BUSCAR_POR_NOME,
-                    ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY
-            );
+            PreparedStatement buscaCandidato = Coneccao.criarPreparedStatement(conn, BUSCAR_POR_NOME);
             buscaCandidato.setString(1, nomeCandidato);
             ResultSet res = buscaCandidato.executeQuery();
 

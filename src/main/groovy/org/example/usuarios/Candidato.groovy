@@ -1,8 +1,5 @@
 package org.example.usuarios
 
-import java.text.ParseException
-import java.text.SimpleDateFormat
-
 class Candidato extends Pessoa {
 
     String sobrenome
@@ -19,7 +16,7 @@ class Candidato extends Pessoa {
     static void adicionarCandidato(List<Candidato> candidatos, Scanner scanner) {
 
         String nome = Regex.validarEntrada(Regex.regexNome, "Nome: ", scanner);
-        String sobrenome = Regex.validarEntrada(Regex.regexSobrenome, "Sobrenome: ", scanner);
+        String sobrenome = Regex.validarEntrada(Regex.regexNome, "Sobrenome: ", scanner);
         Date dataNascimento = ValidacaoDeData.validarEntradaData(Regex.regexNascimento, "Data de nascimento (formato dd-MM-yyyy): ", scanner);
         String email = Regex.validarEntrada(Regex.regexEmail, "Email: ", scanner);
         long cpf = Long.parseLong(Regex.validarEntrada(Regex.regexCpf, "CPF: ", scanner))

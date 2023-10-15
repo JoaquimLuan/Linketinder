@@ -33,7 +33,8 @@ class Pais {
         return -1;
     }
 
-    static int verificarEInserir(Connection conn, String nome, String tipo) {
+    static int vinculaPais(Connection conn, String nome, String tipo) {
+
         int id = -1;
 
         if ("pais".equals(tipo)) {
@@ -46,7 +47,7 @@ class Pais {
         } else if ("candidato".equals(tipo)) {
             id = CandidatoBd.inserirCandidato(conn, nome);
         } else {
-            System.out.println("Tipo inválido. Escolha.");
+            System.out.println("Tipo inválido. Escolha um tipo valido.");
         }
 
         return id;
