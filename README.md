@@ -42,4 +42,6 @@ No pacote de DAO:
 - Foi criado a classe Coneccao, onde toda a logica de conecção com banco de dados e execução de comandos SQL, foi tranferida para esta classe.
 - Foi refatorado todas as funções colocando cada uma para executar apenas uma função, e foi retirado todas as duplicidade de codigos com os desmenbramentos de codigos para outras classes.
 
+  Foi criado testes para as funções do pacote DAO
+
 
