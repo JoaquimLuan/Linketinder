@@ -27,6 +27,19 @@ Onde foram criados as tabelas pais, competencias, empresas, candidatos, vagas, v
 
 Foi utilizado o banco de dados Postegresql
 
+Nessa nova etapa foi realizado a refatoração da aplicação utilizando os metodos de Clin code.
 
+Foram realizadas as seguinte alterações:
+
+- Criação da classe Regex, onde todos os regex e funções relacionadas e a regex foram tranferidas para esta classe.
+- Criação da classe ValidacaoDeData, onde a logia de validação de datas foi tranferida para ela, sendo possivel utilizar essas valições em outras partes do código caso necessário, sem a necessidade de repetir o código.
+- Criado a classe Vaga pois ate o momento não havia sido criado a logica de adição de vaga no Back End.
+
+No pacote de DAO:
+
+- Foi criado a classe Competencias, onde toda a logica de validação e inserção de competências foi tranferida para esta classe.
+- Foi criado a classe País, onde toda a logica de validação e inserção de país foi tranferida para esta classe.
+- Foi criado a classe Coneccao, onde toda a logica de conecção com banco de dados e execução de comandos SQL, foi tranferida para esta classe.
+- Foi refatorado todas as funções colocando cada uma para executar apenas uma função, e foi retirado todas as duplicidade de codigos com os desmenbramentos de codigos para outras classes.
 
 
