@@ -27,7 +27,7 @@ Onde foram criados as tabelas pais, competencias, empresas, candidatos, vagas, v
 
 Foi utilizado o banco de dados Postegresql
 
-Nessa nova etapa foi realizado a refatoração da aplicação utilizando os metodos de Clin code.
+Nessa nova etapa foi realizado a refatoração da aplicação utilizando os metodos de Clean code e SOLID.
 
 Foram realizadas as seguinte alterações:
 
