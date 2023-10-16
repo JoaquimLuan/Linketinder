@@ -15,8 +15,8 @@ class VagasBd {
                 "WHERE v.id_empresa = e.id;";
 
         try {
-            Connection conn = Coneccao.conectar();
-            PreparedStatement vagas = Coneccao.criarPreparedStatement(conn, BUSCAR_TODOS);
+            Connection conn = ConeccaoBd.conectar();
+            PreparedStatement vagas = OperacoesBd.criarPreparedStatement(conn, BUSCAR_TODOS);
             ResultSet res = vagas.executeQuery();
 
             res.last();
@@ -50,7 +50,6 @@ class VagasBd {
         List<Vaga> vagas = new ArrayList<>()
 
         System.out.println("Adicionar vaga:");
-
         Vaga.adicionarVaga(vagas, teclado);
 
         String nomeEmpresa = vagas[0].empresa
@@ -61,7 +60,7 @@ class VagasBd {
             String INSERIR_VAGA = "INSERT INTO vagas (nome, descricao, salario, id_empresa) VALUES (?, ?, ?, ?) RETURNING id"
 
             try {
-                Connection conn = Coneccao.conectar()
+                Connection conn = ConeccaoBd.conectar()
                 PreparedStatement salvarVaga = conn.prepareStatement(INSERIR_VAGA, PreparedStatement.RETURN_GENERATED_KEYS)
 
                 salvarVaga.setString(1, vagas[0].nome)
@@ -82,10 +81,10 @@ class VagasBd {
                 boolean continuar = true
 
                 while (continuar) {
-                    continuar = Competencias.adicionarCompetencia(teclado, conn, idVaga, "vaga");
+                    continuar = CompetenciasBd.adicionarCompetencia(teclado, conn, idVaga, "vaga");
                 }
 
-                Coneccao.desconectar(conn)
+                ConeccaoBd.desconectar(conn)
                 System.out.println("A vaga " + vagas[0].nome + " foi inserida com sucesso!")
 
             } catch (Exception e) {
@@ -102,32 +101,23 @@ class VagasBd {
 
         String BUSCAR_POR_NOME_VAGA = "SELECT id FROM vagas WHERE nome=?";
         String DELETAR_VAGA = "DELETE FROM vagas WHERE id=?";
-        String DELETAR_COMPETENCIAS_VAGA = "DELETE FROM vagas_skills WHERE id_vagas=?";
 
         System.out.println("Informe o nome da vaga: ");
         String nomeVaga = teclado.nextLine();
 
         try {
-            Connection conn = Coneccao.conectar();
-            PreparedStatement buscaVaga = Coneccao.criarPreparedStatement(conn, BUSCAR_POR_NOME_VAGA);
+            Connection conn = ConeccaoBd.conectar();
+            PreparedStatement buscaVaga = OperacoesBd.criarPreparedStatement(conn, BUSCAR_POR_NOME_VAGA);
             buscaVaga.setString(1, nomeVaga);
             ResultSet res = buscaVaga.executeQuery();
 
             if (res.next()) {
                 int idVaga = res.getInt("id");
 
-                PreparedStatement deletarCompetenciasVaga = conn.prepareStatement(DELETAR_COMPETENCIAS_VAGA);
-                deletarCompetenciasVaga.setInt(1, idVaga);
-                deletarCompetenciasVaga.executeUpdate();
-                deletarCompetenciasVaga.close();
+                OperacoesBd.deletaVaga(conn, DELETAR_VAGA, idVaga);
 
-                PreparedStatement deletarVaga = conn.prepareStatement(DELETAR_VAGA);
-                deletarVaga.setInt(1, idVaga);
-                deletarVaga.executeUpdate();
-                deletarVaga.close();
-
-                Coneccao.desconectar(conn);
-                System.out.println("Vaga e suas competências foram deletadas com sucesso!!");
+                ConeccaoBd.desconectar(conn);
+                System.out.println("Vaga foi deletada com sucesso!!");
             } else {
                 System.out.println("Não existe vaga com o nome informado.");
             }
@@ -144,7 +134,7 @@ class VagasBd {
         String CONSULTAR_ID_EMPRESA = "SELECT id FROM empresas WHERE nome = ?"
 
         try {
-            Connection conn = Coneccao.conectar()
+            Connection conn = ConeccaoBd.conectar()
             PreparedStatement consulta = conn.prepareStatement(CONSULTAR_ID_EMPRESA)
             consulta.setString(1, nomeEmpresa)
             ResultSet resultado = consulta.executeQuery()

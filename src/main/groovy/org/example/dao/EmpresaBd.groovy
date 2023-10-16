@@ -17,8 +17,8 @@ class EmpresaBd {
         String BUSCAR_TODOS = "SELECT e.id, e.nome, e.cnpj, e.email, e.cep, p.nome AS nome_pais FROM empresas AS e, pais AS p WHERE e.id_pais = p.id;";
 
         try {
-            Connection conn = Coneccao.conectar();
-            PreparedStatement empresas = Coneccao.criarPreparedStatement(conn, BUSCAR_TODOS);
+            Connection conn = ConeccaoBd.conectar();
+            PreparedStatement empresas = OperacoesBd.criarPreparedStatement(conn, BUSCAR_TODOS);
             ResultSet res = empresas.executeQuery();
 
             res.last();
@@ -55,22 +55,22 @@ class EmpresaBd {
         Empresa.adicionarEmpresas(empresas, teclado);
 
         try {
-            Connection conn = Coneccao.conectar();
+            Connection conn = ConeccaoBd.conectar();
 
             for (Empresa empresa : empresas) {
-                int idPais = Pais.vinculaPais(conn, empresa.getPais(), "pais");
+                int idPais = PaisBd.vinculaPais(conn, empresa.getPais(), "pais");
                 int idEmpresa = inserirEmpresa(conn, empresa, idPais);
 
                 boolean continuar = true;
 
                 while (continuar) {
-                    continuar = Competencias.adicionarCompetencia(teclado, conn, idEmpresa, "empresa");
+                    continuar = CompetenciasBd.adicionarCompetencia(teclado, conn, idEmpresa, "empresa");
                 }
 
                 System.out.println("A empresa " + empresa.getNome() + " foi inserida com sucesso!");
             }
 
-            Coneccao.desconectar(conn);
+            ConeccaoBd.desconectar(conn);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erro ao inserir empresa");
@@ -104,41 +104,31 @@ class EmpresaBd {
 
         String BUSCAR_POR_NOME = "SELECT id FROM empresas WHERE nome=?";
         String DELETAR_EMPRESA = "DELETE FROM empresas WHERE id=?";
-        String DELETAR_COMPETENCIAS = "DELETE FROM empresa_skills WHERE id_empresa=?";
 
         System.out.println("Informe o nome da empresa: ");
         String nomeEmpresa = teclado.nextLine();
 
         try {
-            Connection conn = Coneccao.conectar();
-            PreparedStatement buscaEmpresa = Coneccao.criarPreparedStatement(conn, BUSCAR_POR_NOME);
+            Connection conn = ConeccaoBd.conectar();
+            PreparedStatement buscaEmpresa = OperacoesBd.criarPreparedStatement(conn, BUSCAR_POR_NOME);
             buscaEmpresa.setString(1, nomeEmpresa);
             ResultSet res = buscaEmpresa.executeQuery();
 
             if (res.next()) {
                 int idEmpresa = res.getInt("id");
 
-                PreparedStatement deletarCompetencias = conn.prepareStatement(DELETAR_COMPETENCIAS);
-                deletarCompetencias.setInt(1, idEmpresa);
-                deletarCompetencias.executeUpdate();
-                deletarCompetencias.close();
+                OperacoesBd.deletaEmpresa(conn, DELETAR_EMPRESA, idEmpresa);
 
-                PreparedStatement deletarEmpresa = conn.prepareStatement(DELETAR_EMPRESA);
-                deletarEmpresa.setInt(1, idEmpresa);
-                deletarEmpresa.executeUpdate();
-                deletarEmpresa.close();
-
-                Coneccao.desconectar(conn);
-                System.out.println("Empresa e suas competências foram deletados com sucesso!!");
+                ConeccaoBd.desconectar(conn);
+                System.out.println("Empresa foi deletada com sucesso!!");
             } else {
                 System.out.println("Não existe Empresa com o nome informado.");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Não foi possível deletar a empresa e suas competências");
+            System.err.println("Não foi possível deletar a empresa");
             System.exit(-42);
         }
     }
-
 }

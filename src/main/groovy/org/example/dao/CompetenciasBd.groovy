@@ -5,7 +5,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class Competencias {
+class CompetenciasBd {
 
     static int verificarCompetencia(Connection conn, String nomeCompetencia) throws SQLException {
         String verificarCompetenciaSQL = "SELECT id FROM competencias WHERE nome = ?";

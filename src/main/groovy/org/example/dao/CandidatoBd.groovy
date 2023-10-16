@@ -18,8 +18,8 @@ class CandidatoBd {
                 "WHERE c.id_pais = p.id;";
 
         try {
-            Connection conn = Coneccao.conectar();
-            PreparedStatement candidatos = Coneccao.criarPreparedStatement(conn, BUSCAR_TODOS);
+            Connection conn = ConeccaoBd.conectar();
+            PreparedStatement candidatos = OperacoesBd.criarPreparedStatement(conn, BUSCAR_TODOS);
             ResultSet res = candidatos.executeQuery();
 
             res.last();
@@ -52,30 +52,31 @@ class CandidatoBd {
     }
 
     static void inserirCandidato() {
+
         List<Candidato> candidatos = new ArrayList<>();
 
         System.out.println("Adicionar Candidato:");
         Candidato.adicionarCandidato(candidatos, teclado);
 
         try {
-            Connection conn = Coneccao.conectar();
+            Connection conn = ConeccaoBd.conectar();
 
             for (Candidato candidato : candidatos) {
-                int idPais = Pais.vinculaPais(conn, candidato.getPais(), "pais");
+                int idPais = PaisBd.vinculaPais(conn, candidato.getPais(), "pais");
                 int idCandidato = inserirCandidato(conn, candidato, idPais);
 
                 boolean continuar = true;
 
                 while (continuar) {
-                    continuar = Competencias.adicionarCompetencia(teclado, conn, idCandidato, "candidato");
+                    continuar = CompetenciasBd.adicionarCompetencia(teclado, conn, idCandidato, "candidato");
                 }
 
-                Coneccao.desconectar(conn);
+                ConeccaoBd.desconectar(conn);
 
                 System.out.println("O candidato " + candidato.getNome() + " foi inserido com sucesso!");
             }
 
-            Coneccao.desconectar(conn);
+            ConeccaoBd.desconectar(conn);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erro ao inserir candidato");
@@ -112,32 +113,23 @@ class CandidatoBd {
 
         String BUSCAR_POR_NOME = "SELECT id FROM candidatos WHERE nome=?";
         String DELETAR_CANDIDATO = "DELETE FROM candidatos WHERE id=?";
-        String DELETAR_COMPETENCIAS = "DELETE FROM usuario_skills WHERE id_candidatos=?";
 
         System.out.println("Informe o nome do candidato: ");
         String nomeCandidato = teclado.nextLine();
 
         try {
-            Connection conn = Coneccao.conectar();
-            PreparedStatement buscaCandidato = Coneccao.criarPreparedStatement(conn, BUSCAR_POR_NOME);
+            Connection conn = ConeccaoBd.conectar();
+            PreparedStatement buscaCandidato = OperacoesBd.criarPreparedStatement(conn, BUSCAR_POR_NOME);
             buscaCandidato.setString(1, nomeCandidato);
             ResultSet res = buscaCandidato.executeQuery();
 
             if (res.next()) {
                 int idCandidato = res.getInt("id");
 
-                PreparedStatement deletarCompetencias = conn.prepareStatement(DELETAR_COMPETENCIAS);
-                deletarCompetencias.setInt(1, idCandidato);
-                deletarCompetencias.executeUpdate();
-                deletarCompetencias.close();
+                OperacoesBd.deletaCandidato(conn, DELETAR_CANDIDATO, idCandidato)
 
-                PreparedStatement deletarCandidato = conn.prepareStatement(DELETAR_CANDIDATO);
-                deletarCandidato.setInt(1, idCandidato);
-                deletarCandidato.executeUpdate();
-                deletarCandidato.close();
-
-                Coneccao.desconectar(conn);
-                System.out.println("Candidato e suas competências foram deletados com sucesso!!");
+                ConeccaoBd.desconectar(conn);
+                System.out.println("Candidato foi deletado com sucesso!!");
                 return true;
             } else {
                 System.out.println("Não existe candidato com o nome informado.");
@@ -146,7 +138,7 @@ class CandidatoBd {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Não foi possível deletar o candidato e suas competências");
+            System.err.println("Não foi possível deletar o candidato");
             System.exit(-42);
             return false;
         }

@@ -7,7 +7,7 @@ import java.sql.ResultSet
 import java.sql.SQLException
 
 
-class Coneccao {
+class ConeccaoBd {
 
     static Connection conectar() {
         Properties props = new Properties();
@@ -29,10 +29,6 @@ class Coneccao {
             System.exit(-42);
             return null;
         }
-    }
-
-    static PreparedStatement criarPreparedStatement(Connection conn, String sql) throws SQLException {
-        return conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
     }
 
     static void desconectar(Connection conn) {
