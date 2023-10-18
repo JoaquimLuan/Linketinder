@@ -15,9 +15,10 @@ class PaisBd {
 
         if (paisResultSet.next()) {
             return paisResultSet.getInt("id");
+        }else {
+            return -1;
         }
 
-        return -1;
     }
 
     static int inserirPais(Connection conn, String nomePais) throws SQLException {
@@ -28,9 +29,10 @@ class PaisBd {
 
         if (novoPaisResultSet.next()) {
             return novoPaisResultSet.getInt("id");
+        }else {
+            return -1;
         }
 
-        return -1;
     }
 
     static int vinculaPais(Connection conn, String nome, String tipo) {
