@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.usuarios.EmpresaTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-10-15T00:45:37" hostname="NMTZG00717" time="0.02">
-  <properties/>
-  <testcase name="testAdicionarEmpresa()" classname="org.example.usuarios.EmpresaTest" time="0.02"/>
-  <system-out><![CDATA[Nome: CNPJ: Email: CEP: País: ]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -44,4 +44,4 @@ No pacote de DAO:
 
   Foi criado testes para as funções do pacote DAO
 
-
+Nessa parte da aplicação foram criados os pattern singleton e factory, e colocado o projeto no padrão MVC.
