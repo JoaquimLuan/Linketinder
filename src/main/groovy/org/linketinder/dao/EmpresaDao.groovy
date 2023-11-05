@@ -1,4 +1,4 @@
-package org.linketinder.dao.empresa
+package org.linketinder.dao
 
 import org.linketinder.Model.EmpresaModel
 import org.linketinder.db.factory.PostgreConectFactory
@@ -9,12 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException
 
-class EmpresaDao implements IEmpresaDao{
+class EmpresaDao implements IUsuarioDao<EmpresaModel>{
+
+    private String BUSCAR_TODOS = "SELECT e.id, e.nome, e.cnpj, e.email, e.cep, p.nome AS nome_pais FROM empresas AS e, pais AS p WHERE e.id_pais = p.id;"
+    private String BUSCAR_POR_NOME = "SELECT id FROM empresas WHERE nome=?"
+    private String DELETAR_EMPRESA = "DELETE FROM empresas WHERE nome=?"
 
     @Override
-    List listarEmpresas() {
-
-        String BUSCAR_TODOS = "SELECT e.id, e.nome, e.cnpj, e.email, e.cep, p.nome AS nome_pais FROM empresas AS e, pais AS p WHERE e.id_pais = p.id;"
+    List listar() {
 
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             PreparedStatement empresas = new PostgreConectFactory().criarPreparedStatement(conn, BUSCAR_TODOS)
@@ -44,7 +46,7 @@ class EmpresaDao implements IEmpresaDao{
     }
 
     @Override
-    int inserirEmpresa(EmpresaModel empresa, int idPais) throws SQLException {
+    int inserir(EmpresaModel empresa, int idPais) throws SQLException {
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             String inserirEmpresaSQL = "INSERT INTO empresas (nome, cnpj, email, cep, id_pais) VALUES (?, ?, ?, ?, ?) RETURNING id"
             PreparedStatement inserirEmpresaStmt = conn.prepareStatement(inserirEmpresaSQL, PreparedStatement.RETURN_GENERATED_KEYS)
@@ -72,9 +74,7 @@ class EmpresaDao implements IEmpresaDao{
     }
 
     @Override
-    boolean deletarEmpresa(String nomeEmpresa) {
-        String BUSCAR_POR_NOME = "SELECT id FROM empresas WHERE nome=?"
-        String DELETAR_EMPRESA = "DELETE FROM empresas WHERE nome=?"
+    boolean deletar(String nomeEmpresa) {
 
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             PreparedStatement buscaEmpresa = new PostgreConectFactory().criarPreparedStatement(conn, BUSCAR_POR_NOME)
@@ -84,7 +84,6 @@ class EmpresaDao implements IEmpresaDao{
             if (res.next()) {
                 PreparedStatement deletarEmpresa = new PostgreConectFactory().criarPreparedStatement(conn, DELETAR_EMPRESA)
                 deletarEmpresa.setString(1, nomeEmpresa)
-
                 int rowsDeleted = deletarEmpresa.executeUpdate()
 
                 if (rowsDeleted > 0) {
@@ -100,5 +99,4 @@ class EmpresaDao implements IEmpresaDao{
             return e
         }
     }
-
 }

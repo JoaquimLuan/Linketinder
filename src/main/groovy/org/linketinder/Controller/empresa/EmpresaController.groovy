@@ -1,20 +1,20 @@
 package org.linketinder.Controller.empresa
 
-import org.linketinder.dao.empresa.EmpresaDao
+import org.linketinder.dao.EmpresaDao
 
 class EmpresaController {
 
     EmpresaDao empresaBd = new  EmpresaDao()
 
     List listaEmpresas(){
-        return empresaBd.listarEmpresas()
+        return empresaBd.listar()
     }
 
     int inserirEmpresaController(newEmpresa, idPais) {
-        return empresaBd.inserirEmpresa(newEmpresa, idPais)
+        return empresaBd.inserir(newEmpresa, idPais)
     }
 
     boolean deletarEmpresaController(String nomeEmpresa) {
-        return empresaBd.deletarEmpresa(nomeEmpresa)
+        return empresaBd.deletar(nomeEmpresa)
     }
 }

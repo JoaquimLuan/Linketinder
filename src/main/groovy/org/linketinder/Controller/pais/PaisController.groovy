@@ -1,6 +1,6 @@
 package org.linketinder.Controller.pais
 
-import org.linketinder.dao.pais.PaisDao
+import org.linketinder.dao.PaisDao
 
 class PaisController {
 

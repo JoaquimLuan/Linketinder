@@ -1,21 +1,21 @@
 package org.linketinder.Controller.candidato
 
-import org.linketinder.dao.candidato.CandidatoDao
+import org.linketinder.dao.CandidatoDao
 
 class CandidatoController {
 
     CandidatoDao candidatoBd = new CandidatoDao()
 
     List listaUsuarios(){
-        return candidatoBd.listarCandidato()
+        return candidatoBd.listar()
     }
 
     int inserirCandidatoController(newCandidate, idPais) {
-        return candidatoBd.inserirCandidato(newCandidate, idPais)
+        return candidatoBd.inserir(newCandidate, idPais)
     }
 
     boolean deletarCandidatoController(String nomeCandidato) {
-        return candidatoBd.deletarCandidato(nomeCandidato);
+        return candidatoBd.deletar(nomeCandidato);
     }
 
 }

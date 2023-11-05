@@ -1,6 +1,6 @@
 package org.linketinder.Controller.vaga
 
-import org.linketinder.dao.vaga.VagasDao
+import org.linketinder.dao.VagasDao
 
 class VagasController {
 

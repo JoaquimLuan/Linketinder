@@ -2,8 +2,8 @@ package org.linketinder.View.candidato
 
 import org.linketinder.Controller.candidato.CandidatoController
 import org.linketinder.Model.CandidatoModel
-import org.linketinder.Model.Regex
-import org.linketinder.Model.RegexPattern
+import org.linketinder.Utilis.Regex
+import org.linketinder.Utilis.RegexPattern
 import org.linketinder.View.pais.PaisView
 
 import java.text.SimpleDateFormat

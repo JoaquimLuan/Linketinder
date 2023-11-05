@@ -1,8 +1,8 @@
 package org.linketinder.View.vaga
 
 import org.linketinder.Controller.vaga.VagasController
-import org.linketinder.Model.Regex
-import org.linketinder.Model.RegexPattern
+import org.linketinder.Utilis.Regex
+import org.linketinder.Utilis.RegexPattern
 import org.linketinder.Model.VagaModel
 
 class VagaView {

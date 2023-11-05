@@ -1,7 +1,6 @@
 package org.linketinder.dao
 
 import org.linketinder.Model.CandidatoModel
-import org.linketinder.dao.candidato.CandidatoDao
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ class CandidatoBdTest {
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt(1)).thenReturn(1);
 
-        int candidatoId = candidatoBd.inserirCandidato(conn, candidato, 1);
+        int candidatoId = candidatoBd.inserir(conn, candidato, 1);
 
         verify(preparedStatement, times(1)).executeUpdate();
 

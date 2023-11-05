@@ -2,8 +2,8 @@ package org.linketinder.View.empresa
 
 import org.linketinder.Controller.empresa.EmpresaController
 import org.linketinder.Model.EmpresaModel
-import org.linketinder.Model.Regex
-import org.linketinder.Model.RegexPattern
+import org.linketinder.Utilis.Regex
+import org.linketinder.Utilis.RegexPattern
 import org.linketinder.View.pais.PaisView
 
 class EmpresaView {

@@ -1,6 +1,6 @@
 package org.linketinder.Controller.vaga
 
-import org.linketinder.dao.competencia.CompetenciasDao
+import org.linketinder.dao.CompetenciasDao
 
 class VagaCompetenciaController {
 

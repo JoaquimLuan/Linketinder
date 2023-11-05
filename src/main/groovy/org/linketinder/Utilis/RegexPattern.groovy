@@ -1,4 +1,4 @@
-package org.linketinder.Model
+package org.linketinder.Utilis
 
 enum RegexPattern {
 

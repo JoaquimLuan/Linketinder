@@ -1,4 +1,4 @@
-package org.linketinder.dao.vaga
+package org.linketinder.dao
 
 import org.linketinder.Model.VagaModel
 import org.linketinder.db.factory.PostgreConeccaoDb
@@ -9,14 +9,13 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class VagasDao implements IVagaDao{
+class VagasDao{
 
+    private String BUSCAR_TODOS = "SELECT v.id, v.nome, v.descricao, v.salario, e.nome AS nome\n" +
+            "FROM vagas AS v, empresas AS e\n" +
+            "WHERE v.id_empresa = e.id;"
 
-    @Override
     List listarVagas() {
-        String BUSCAR_TODOS = "SELECT v.id, v.nome, v.descricao, v.salario, e.nome AS nome\n" +
-                "FROM vagas AS v, empresas AS e\n" +
-                "WHERE v.id_empresa = e.id;"
 
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             PreparedStatement vagas = new PostgreConectFactory().criarPreparedStatement(conn, BUSCAR_TODOS)
@@ -44,7 +43,7 @@ class VagasDao implements IVagaDao{
         }
     }
 
-    @Override
+
     int inserirVaga(VagaModel vaga) throws SQLException {
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             String inserirVagaSQL = "INSERT INTO vagas (nome, descricao, salario, id_empresa) VALUES (?, ?, ?, ?) RETURNING id"
@@ -76,8 +75,6 @@ class VagasDao implements IVagaDao{
         }
     }
 
-
-    @Override
     boolean deletarVaga(String nomeVaga) {
         String BUSCAR_POR_NOME_VAGA = "SELECT id FROM vagas WHERE nome=?"
         String DELETAR_VAGA = "DELETE FROM vagas WHERE nome=?"
@@ -113,7 +110,6 @@ class VagasDao implements IVagaDao{
     static int consultarIdEmpresa(String nomeEmpresa) {
 
         String CONSULTAR_ID_EMPRESA = "SELECT id FROM empresas WHERE nome = ?"
-
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             PreparedStatement consulta = new PostgreConectFactory().criarPreparedStatement(conn, CONSULTAR_ID_EMPRESA)
             consulta.setString(1, nomeEmpresa)

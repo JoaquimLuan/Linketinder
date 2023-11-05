@@ -1,4 +1,4 @@
-package org.linketinder.dao.competencia
+package org.linketinder.dao
 
 import org.linketinder.db.factory.PostgreConeccaoDb
 

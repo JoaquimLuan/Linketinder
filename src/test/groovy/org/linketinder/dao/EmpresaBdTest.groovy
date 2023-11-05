@@ -2,7 +2,6 @@ package org.linketinder.dao
 
 
 import org.linketinder.Model.EmpresaModel
-import org.linketinder.dao.empresa.EmpresaDao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,7 @@ class EmpresaBdTest {
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt(1)).thenReturn(1);
 
-        int empresaId = EmpresaBd.inserirEmpresa(conn, empresa, 1);
+        int empresaId = EmpresaBd.inserir(conn, empresa, 1);
 
         verify(preparedStatement, times(1)).executeUpdate();
 

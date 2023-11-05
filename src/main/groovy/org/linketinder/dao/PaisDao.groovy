@@ -1,7 +1,6 @@
-package org.linketinder.dao.pais
+package org.linketinder.dao
 
-import org.linketinder.dao.candidato.CandidatoDao
-import org.linketinder.dao.empresa.EmpresaDao
+
 import org.linketinder.db.factory.PostgreConeccaoDb
 
 import java.sql.Connection
@@ -69,9 +68,9 @@ class PaisDao {
                 id = inserirPais(nome)
             }
         } else if ("empresa".equals(tipo)) {
-            id = empresaBd.inserirEmpresa(nome)
+            id = empresaBd.inserir(nome)
         } else if ("candidato".equals(tipo)) {
-            id = candidatoBd.inserirCandidato(nome)
+            id = candidatoBd.inserir(nome)
         }
         return id
     }

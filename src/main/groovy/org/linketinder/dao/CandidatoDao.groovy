@@ -1,4 +1,4 @@
-package org.linketinder.dao.candidato
+package org.linketinder.dao
 
 import org.linketinder.Model.CandidatoModel
 import org.linketinder.db.factory.PostgreConeccaoDb
@@ -9,19 +9,21 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 
-class CandidatoDao implements ICandidatoDao{
+class CandidatoDao implements IUsuarioDao<CandidatoModel>{
+
+    private String BUSCAR_TODOS = "SELECT c.id, c.nome, c.sobrenome, c.data_nascimento, c.email, c.cpf, c.cep, p.nome AS nome_pais FROM candidatos AS c, pais AS p WHERE c.id_pais = p.id;"
+    private String BUSCAR_POR_NOME = "SELECT id FROM candidatos WHERE nome=?"
+    private String DELETAR_CANDIDATO = "DELETE FROM candidatos WHERE nome=?"
 
     @Override
-    List listarCandidato() {
+    List listar() {
 
-        String BUSCAR_TODOS = "SELECT c.id, c.nome, c.sobrenome, c.data_nascimento, c.email, c.cpf, c.cep, p.nome AS nome_pais\n" +
-                "FROM candidatos AS c, pais AS p\n" +
-                "WHERE c.id_pais = p.id;"
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             PreparedStatement candidatos = new PostgreConectFactory().criarPreparedStatement(conn, BUSCAR_TODOS)
             ResultSet res = candidatos.executeQuery()
 
             res.last()
+
             res.beforeFirst()
 
             List listCandidatos = []
@@ -47,7 +49,7 @@ class CandidatoDao implements ICandidatoDao{
     }
 
     @Override
-    int inserirCandidato(CandidatoModel candidato, int idPais) throws SQLException {
+    int inserir(CandidatoModel candidato, int idPais) throws SQLException {
 
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             String inserirCandidatoSQL = "INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, cpf, cep, id_pais) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id"
@@ -77,9 +79,7 @@ class CandidatoDao implements ICandidatoDao{
     }
 
     @Override
-    boolean deletarCandidato(String nomeCandidato) {
-        String BUSCAR_POR_NOME = "SELECT id FROM candidatos WHERE nome=?"
-        String DELETAR_CANDIDATO = "DELETE FROM candidatos WHERE nome=?"
+    boolean deletar(String nomeCandidato) {
 
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()) {
             PreparedStatement buscaCandidato = new PostgreConectFactory().criarPreparedStatement(conn, BUSCAR_POR_NOME)
@@ -100,5 +100,4 @@ class CandidatoDao implements ICandidatoDao{
             throw new Exception("Erro ao deletar Candidato!!!")
         }
     }
-
 }
