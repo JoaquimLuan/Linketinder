@@ -4,7 +4,7 @@ class EmpresaModel extends Pessoa {
 
     String cnpj
 
-    EmpresaModel(String nome, String cnpj, String email, String cep, String pais) {
+    EmpresaModel(String nome, String cnpj, String email, String cep, int pais) {
         super(nome, email, cep, pais)
         this.cnpj = cnpj
     }

@@ -49,7 +49,7 @@ class CandidatoDao implements IUsuarioDao<CandidatoModel>{
     }
 
     @Override
-    int inserir(CandidatoModel candidato, int idPais) throws SQLException {
+    int inserir(CandidatoModel candidato) throws SQLException {
 
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             String inserirCandidatoSQL = "INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, cpf, cep, id_pais) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id"
@@ -60,7 +60,7 @@ class CandidatoDao implements IUsuarioDao<CandidatoModel>{
             inserirCandidatoStmt.setString(4, candidato.getEmail())
             inserirCandidatoStmt.setString(5, candidato.getCpf())
             inserirCandidatoStmt.setString(6, candidato.getCep())
-            inserirCandidatoStmt.setInt(7, idPais)
+            inserirCandidatoStmt.setInt(7, candidato.getPais())
             inserirCandidatoStmt.executeUpdate()
 
             ResultSet generatedKeys = inserirCandidatoStmt.getGeneratedKeys()

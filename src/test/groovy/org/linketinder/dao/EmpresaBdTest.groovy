@@ -1,60 +1,51 @@
 package org.linketinder.dao
 
-
 import org.linketinder.Model.EmpresaModel
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.junit.jupiter.api.Test
 
+import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertNotNull
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmpresaBdTest {
 
-    @Mock
-    private Connection conn;
+    private EmpresaDao dao = new EmpresaDao()
 
-    @Mock
-    private PreparedStatement preparedStatement;
+    @Test
+    void testListarEmpresas() {
+        List<EmpresaModel> empresas = dao.listar()
+        assertNotNull(empresas)
+        assertTrue(empresas.size() > 0)
 
-    @Mock
-    private ResultSet resultSet;
 
-    private EmpresaDao EmpresaBd;
-    private List<EmpresaModel> empresas;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-        EmpresaBd = new EmpresaDao();
-        empresas = new ArrayList<>();
     }
 
     @Test
-    void testInserirEmpresa() throws SQLException {
+    void testInserirEmpresa() {
+        EmpresaModel empresa = new EmpresaModel()
+        empresa.setNome("Minha Empresa")
+        empresa.setCnpj("123456789")
+        empresa.setEmail("empresa@example.com")
+        empresa.setCep("12345")
 
-        EmpresaModel empresa = new EmpresaModel("EmpresaX",12345678911223, "joao@example.com", 12345678, "Brasil");
+        int idEmpresa = dao.inserir(empresa, 1)
 
-        when(conn.prepareStatement(anyString(), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-        when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(1);
-
-        int empresaId = EmpresaBd.inserir(conn, empresa, 1);
-
-        verify(preparedStatement, times(1)).executeUpdate();
-
-        verify(preparedStatement, times(1)).getGeneratedKeys();
-
-        verify(resultSet, times(1)).next();
-
-        Assertions.assertEquals(1, empresaId);
+        assertTrue(idEmpresa > 0);
     }
+
+    @Test
+    void testDeletarEmpresaExistente() {
+        String nomeEmpresa = "Minha Empresa"
+        boolean deleted = dao.deletar(nomeEmpresa)
+        assertTrue(deleted)
+    }
+
+    @Test
+    void testDeletarEmpresaInexistente() {
+        String nomeEmpresa = "EmpresaInexistente"
+        boolean deleted = dao.deletar(nomeEmpresa)
+        assertFalse(deleted)
+    }
+
 
 }

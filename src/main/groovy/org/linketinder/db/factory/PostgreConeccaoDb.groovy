@@ -10,6 +10,10 @@ import java.sql.SQLException
 class PostgreConeccaoDb implements IDataBaseConect{
 
     private static PostgreConeccaoDb instance;
+    private static final String url = "jdbc:postgresql://localhost:5432/linketinder"
+    private static final String user = "joaquimborges"
+    private static final String passWord = "joaquim"
+
 
     static PostgreConeccaoDb getInstance() {
         if (instance == null) {
@@ -19,14 +23,10 @@ class PostgreConeccaoDb implements IDataBaseConect{
     }
 
     Connection conectar() throws SQLException {
-        Properties props = new Properties();
-        props.setProperty("user", "joaquimborges");
-        props.setProperty("password", "joaquim");
-        props.setProperty("ssl", "false");
-        String URL_SERVIDOR = "jdbc:postgresql://localhost:5432/linketinder";
 
         try {
-            return DriverManager.getConnection(URL_SERVIDOR, props);
+            Class.forName("org.postgresql.Driver")
+            return DriverManager.getConnection(url, user, passWord);
         } catch (Exception e) {
             e.printStackTrace();
             if (e instanceof ClassNotFoundException) {

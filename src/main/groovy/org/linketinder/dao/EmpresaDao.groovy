@@ -46,7 +46,7 @@ class EmpresaDao implements IUsuarioDao<EmpresaModel>{
     }
 
     @Override
-    int inserir(EmpresaModel empresa, int idPais) throws SQLException {
+    int inserir(EmpresaModel empresa) throws SQLException {
         try (Connection conn = PostgreConeccaoDb.getInstance().conectar()){
             String inserirEmpresaSQL = "INSERT INTO empresas (nome, cnpj, email, cep, id_pais) VALUES (?, ?, ?, ?, ?) RETURNING id"
             PreparedStatement inserirEmpresaStmt = conn.prepareStatement(inserirEmpresaSQL, PreparedStatement.RETURN_GENERATED_KEYS)
@@ -54,7 +54,7 @@ class EmpresaDao implements IUsuarioDao<EmpresaModel>{
             inserirEmpresaStmt.setString(2, empresa.getCnpj())
             inserirEmpresaStmt.setString(3, empresa.getEmail())
             inserirEmpresaStmt.setString(4, empresa.getCep())
-            inserirEmpresaStmt.setInt(5, idPais)
+            inserirEmpresaStmt.setInt(5, empresa.getPais())
 
             inserirEmpresaStmt.executeUpdate()
             ResultSet generatedKeys = inserirEmpresaStmt.getGeneratedKeys()

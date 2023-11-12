@@ -1,59 +1,52 @@
 package org.linketinder.dao
 
-import org.linketinder.Model.CandidatoModel
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.junit.jupiter.api.Test
+import org.linketinder.Model.CandidatoModel;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 class CandidatoBdTest {
 
-    @Mock
-    private Connection conn;
 
-    @Mock
-    private PreparedStatement preparedStatement;
+    private CandidatoDao dao = new CandidatoDao();
 
-    @Mock
-    private ResultSet resultSet;
+    @Test
+    void testListarCandidatos() {
+        List<CandidatoModel> candidatos = dao.listar()
+        assertNotNull(candidatos)
+        assertTrue(candidatos.size() > 0)
 
-    private CandidatoDao candidatoBd;
-    private List<CandidatoModel> candidatos;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-        candidatoBd = new CandidatoDao();
-        candidatos = new ArrayList<>();
     }
 
     @Test
-    void testInserirCandidato() throws SQLException {
+    void testInserirCandidato() {
+        CandidatoModel candidato = new CandidatoModel()
+        candidato.setNome("João")
+        candidato.setSobrenome("Silva")
+        candidato.setDataNascimento(new Date())
+        candidato.setEmail("joao@example.com")
+        candidato.setCpf("123456789")
+        candidato.setCep("12345")
 
-        CandidatoModel candidato = new CandidatoModel("João", "Sobrenome", "11-11-2000", "joao@example.com", "12345678901L", "123456", "Brasil");
+        int idCandidato = dao.inserir(candidato, 1)
 
-        when(conn.prepareStatement(anyString(), eq(PreparedStatement.RETURN_GENERATED_KEYS))).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-        when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(true);
-        when(resultSet.getInt(1)).thenReturn(1);
+        assertTrue(idCandidato > 0)
 
-        int candidatoId = candidatoBd.inserir(conn, candidato, 1);
-
-        verify(preparedStatement, times(1)).executeUpdate();
-
-        verify(preparedStatement, times(1)).getGeneratedKeys();
-
-        verify(resultSet, times(1)).next();
-
-        Assertions.assertEquals(1, candidatoId);
     }
+
+    @Test
+     void testDeletarCandidatoExistente() {
+        String nomeCandidato = "João"
+        boolean deleted = dao.deletar(nomeCandidato)
+        assertTrue(deleted)
+    }
+
+    @Test
+    void testDeletarCandidatoInexistente() {
+        String nomeCandidato = "CandidatoInexistente"
+        boolean deleted = dao.deletar(nomeCandidato)
+        assertFalse(deleted)
+    }
+
 
 }

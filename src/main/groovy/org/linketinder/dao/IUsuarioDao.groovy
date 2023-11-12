@@ -4,6 +4,6 @@ import java.sql.SQLException
 
 interface IUsuarioDao<T> {
     List listar()
-    int inserir(T objeto, int t) throws SQLException
+    int inserir(T objeto) throws SQLException
     boolean deletar(String nomeObjeto)
 }

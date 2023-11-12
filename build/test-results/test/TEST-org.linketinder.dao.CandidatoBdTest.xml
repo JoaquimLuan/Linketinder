@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.linketinder.dao.CandidatoBdTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2023-11-08T00:45:23" hostname="NMTZG00717" time="0.488">
+  <properties/>
+  <testcase name="testDeletarCandidatoExistente()" classname="org.linketinder.dao.CandidatoBdTest" time="0.314"/>
+  <testcase name="testListarCandidatos()" classname="org.linketinder.dao.CandidatoBdTest" time="0.051"/>
+  <testcase name="testDeletarCandidatoInexistente()" classname="org.linketinder.dao.CandidatoBdTest" time="0.021"/>
+  <testcase name="testInserirCandidato()" classname="org.linketinder.dao.CandidatoBdTest" time="0.098"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

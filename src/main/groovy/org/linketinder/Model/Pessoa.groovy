@@ -4,9 +4,9 @@ abstract class Pessoa {
     String nome
     String email
     String cep
-    String pais
+    int pais
 
-    Pessoa(String nome, String email, String cep, String pais) {
+    Pessoa(String nome, String email, String cep, int pais) {
         this.nome = nome
         this.email = email
         this.cep = cep

@@ -6,7 +6,7 @@ class CandidatoModel extends Pessoa {
     Date dataNascimento
     String cpf
 
-    CandidatoModel(String nome, String sobrenome, Date dataNascimento, String email, String cpf, String cep, String pais) {
+    CandidatoModel(String nome, String sobrenome, Date dataNascimento, String email, String cpf, String cep, int pais) {
         super(nome, email, cep,  pais)
         this.sobrenome = sobrenome
         this.dataNascimento = dataNascimento
